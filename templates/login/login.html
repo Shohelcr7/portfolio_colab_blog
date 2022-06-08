@@ -1,0 +1,32 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}
+  LogIn Landing
+{% endblock %}
+
+
+
+
+
+{% block content_block %}
+
+
+
+
+
+
+  <h2 >Want to explore!! Login Here </h2>
+  <form   method="POST">
+    {{ form| crispy}}
+    {% csrf_token %}
+    <button class="btn btn-primary btn-sm" type="submit" >Login</button>
+  </form>
+
+
+    <br>
+    <p >Don't Have an Account ? Sign Up Here  <a href="{% url 'login:signup' %}" class="btn btn-outline-success btn-sm">Sign Up</a></p>
+
+  <!--  <p >Forgot Password ? Update Here..  <a href="{% url 'login:password_change' %}">Update Password</a></p>
+-->
+{% endblock %}

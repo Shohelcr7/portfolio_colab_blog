@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}
+Create New Post
+{% endblock %}
+
+
+{% block content_block %}
+<h2 class="header m-4 p-4">Anythink in Your mind ?..Let Us know .. </h2>
+
+<form  method="post" enctype="multipart/form-data">
+    {{form|crispy}}
+    {% csrf_token%}
+  <button type="submit" class="btn btn-primary btn-md"> Publish</button>
+</form>
+
+{% endblock %}

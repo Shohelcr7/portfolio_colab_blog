@@ -1,0 +1,121 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}
+  Blog Details
+{% endblock %}
+
+
+{% block content_block %}
+<div class="blog-header">
+
+</div>
+
+<div class="row">
+  <div class="col-sm-4">
+    <h2>  {{blog.blog_title}}</h2>
+    <br>
+    <hr class="<progress-bar bg-danger " max="100"></hr>
+    <hr class="<progress-bar bg-success " max="100"></hr>
+    <br>
+      <h5> Author :: {{blog.author}}</h5>
+      <h5><b>Posted on :: {{blog.publish_date}}</b></h5>
+    <h5><b>Updated on :: {{blog.update_time}}</b></h5>
+    <h6 class="btn btn-primary btn-lg">{{blog.blog_loved.count}} Loves | {{blog.blog_liked.count}} Likes | {{blog.blog_comment.count}} Comments</h6>
+<hr class="<progress-bar bg-danger " max="100"></hr>
+  <hr class="<progress-bar bg-success " max="100"></hr>
+
+  </div>
+  <div class="col-sm-8">
+    <img src="/media/{{ blog.blog_pic }}"  alt="blog Image" width="100%">
+  </div>
+</div>
+
+<br>
+<hr class="<progress-bar bg-dark " max="100"></hr>
+  <hr class="<progress-bar bg-dark " max="100"></hr>
+
+<br>
+<div class="row">
+
+  <div class="col-sm-11">
+    {{blog.blog_content|linebreaks}}
+  </div>
+  <div class="col-sm-1">
+
+  </div>
+</div>
+<br>
+<h4>Express Your Feelings Here</h4>
+<br>
+
+<!-- Blog Like & Unlike options     -->
+<div class="row">
+  {% if not liked %}
+  <div class="col-10 mb-4 ">
+
+      <a href="{% url 'blog:blog_loved' pk=blog.pk %}" >
+          <i class="fa fa-heart fa-2x ml-4 pl-4" aria-hidden="true"> </i>
+        </a>
+
+        <a href="{% url 'blog:blog_liked' pk=blog.pk %}" >
+            <i class="fa fa-thumbs-up fa-2x ml-4 pl-4" aria-hidden="true"> </i>
+          </a>
+  </div>
+
+{% else %}
+    <div class="col-10 mb-4">
+
+      <a href="{% url 'blog:blog_loved' pk=blog.pk %}" >
+          <i class="fa fa-heart fa-2x ml-4 pl-4" aria-hidden="true"> </i>
+        </a>
+
+      <a href="{% url 'blog:blog_unliked' pk=blog.pk %}">
+        <i class="fa fa-thumbs-down fa-2x ml-4 pl-4" aria-hidden="true">   </i>
+      </a>
+
+
+    </div>
+
+{% endif %}
+</div>
+
+<hr class="<progress-bar bg-dark " max="100"></hr>
+
+
+
+
+<div class="row">
+  <div class="col-sm-7">
+    <h3><i class="fa fa-comments" aria-hidden="true"></i>
+      All Comment's are..</h3>
+    <hr class="<progress-bar bg-danger " max="100"></hr>
+      <hr class="<progress-bar bg-success " max="100"></hr>
+    {% for comment in blog.blog_comment.all %}
+    <p>
+
+      <i class="fa fa-commenting-o" aria-hidden="true"></i>
+
+      <a href="#">{{ comment.user}}</a>
+       {{comment.comment}}
+      <h5>{{comment.comment_date}}</h5>
+
+    </p>
+{% endfor %}
+  </div>
+  <div class="col-sm-5">
+    <h5><i class="fa fa-commenting" aria-hidden="true"></i>
+      Anything to say ? Write Here --
+    </h5>
+    <form  method="post">
+      {{comment_form|crispy}}
+      {% csrf_token %}
+      <button type="submit" class="btn btn-primary btn-sm"> Comment</button>
+    </form>
+  </div>
+
+</div>
+
+<footer class="footer ml-6 mt-4">This post copyright is reserved by <b><em><i class="fa fa-copyright" aria-hidden="true"></i> {{blog.author}}</em></b></footer>
+
+{% endblock %}

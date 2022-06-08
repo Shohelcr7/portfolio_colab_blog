@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+
+{% block title_block %}
+  User Profile
+{% endblock %}
+
+
+{% block content_block %}
+
+
+<div class="card text-light bg-dark border-danger mb-3" style="width: 26rem;padding:40px;margin:70px 220px;">
+  {% if user.user_profile %}
+    <img class="card-img-top " src="/media/{{ user.user_profile.profile_pic }}" alt="Card image cap">
+    <p style="margin-top:20px;"><a href="{% url 'login:change_profile_pic' %}" class="btn btn-outline-warning btn-sm">Add New Image</a></p>
+  {% else %}
+    <img class="card-img-top" src="/media/profile_pics/myavatar.png" alt="Card image cap">
+    <p style="margin-top:20px;"><a href="{% url 'login:add_profile_pic' %}" class="btn btn-outline-danger btn-sm">Add Image</a></p>
+  {% endif %}
+
+  <div class="card-body">
+    <h5 class="card-title">{{user.username}}'s Profile</h5>
+    <p class="card-text">{{user.user_profile.about_me}}</p>
+  </div>
+  <ul class="list-group list-group-flush">
+    <li class="list-group-item text-dark">First Name: {{user.first_name }}</li>
+    <li class="list-group-item text-dark">Last Name: {{user.last_name }}</li>
+    <li class="list-group-item text-dark">Email: {{user.email}}</li>
+  </ul>
+  <div class="card-body">
+    <a href="{% url 'login:update_info' %}"style="margin-left:80px; margin-top:10px;" class="btn btn-outline-warning btn-sm"> Update Profile Info</a>
+  </div>
+</div>
+
+
+{% endblock %}
