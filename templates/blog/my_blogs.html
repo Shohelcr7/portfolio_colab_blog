@@ -10,6 +10,7 @@
 {% block content_block %}
 
 {% for blog in user.blog_author.all %}
+{%  if blog %}
 <h3>{{blog.blog_title}}</h3>
 <h6>{{blog.publish_date}}</h6>
 <h6 class="btn btn-dark btn-lg">{{blog.blog_loved.count}} Loves | {{blog.blog_liked.count}} Likes | {{blog.blog_comment.count}} Comments</h6>
@@ -17,14 +18,23 @@
   <div class="col-sm-4">
     <img src="/media/{{blog.blog_pic}}" width="100%">
   </div>
+
   <div class="col-sm-8">
     <p>{{blog.blog_content|range_filter|linebreaks}}</p>
     <a class="btn btn-dark btn-sm" href="{% url 'blog:details' pk=blog.pk %}">Read More</a>
     <a class="btn btn-danger btn-sm" href="{% url 'blog:blog_edit' pk=blog.pk %}">Edit</a>
   </div>
 </div>
+{% else %}
+<div class="alert alert-warning">
 
+  <h2>
+    You have no article to update .... Create one First..
+  </h2>
+  <a href="{% url 'blog:blog_create' %}" class="btn btn-info btn-sm"> Create Here</a>
 
+</div>
+{% endif %}
 <hr>
 
 {% endfor %}

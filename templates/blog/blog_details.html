@@ -46,6 +46,9 @@
   </div>
 </div>
 <br>
+
+{% if user.is_authenticated %}
+
 <h4>Express Your Feelings Here</h4>
 <br>
 
@@ -80,6 +83,7 @@
 {% endif %}
 </div>
 
+{% endif %}
 <hr class="<progress-bar bg-dark " max="100"></hr>
 
 
@@ -87,10 +91,19 @@
 
 <div class="row">
   <div class="col-sm-7">
+    <a class="btn btn-outline-primary btn-lg mr-4" href="{% url 'login:signup' %}">Sign Up Here to Comments</a>
+
+
+
+      <hr class="<progress-bar bg-success " max="100"></hr>
     <h3><i class="fa fa-comments" aria-hidden="true"></i>
       All Comment's are..</h3>
+
+
     <hr class="<progress-bar bg-danger " max="100"></hr>
       <hr class="<progress-bar bg-success " max="100"></hr>
+
+
     {% for comment in blog.blog_comment.all %}
     <p>
 
@@ -103,6 +116,9 @@
     </p>
 {% endfor %}
   </div>
+
+{% if user.is_authenticated %}
+
   <div class="col-sm-5">
     <h5><i class="fa fa-commenting" aria-hidden="true"></i>
       Anything to say ? Write Here --
@@ -114,6 +130,8 @@
     </form>
   </div>
 
+
+{% endif %}
 </div>
 
 <footer class="footer ml-6 mt-4">This post copyright is reserved by <b><em><i class="fa fa-copyright" aria-hidden="true"></i> {{blog.author}}</em></b></footer>

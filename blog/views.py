@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.views.generic import ListView,CreateView,UpdateView,DetailView,DeleteView,View,TemplateView
 from .models import Blog,Comment,Like,Love
+from login.models import UserProfile
 from .forms import CommentForm
 import uuid
 
@@ -12,10 +13,10 @@ import uuid
 
 
 class MyBlogs(LoginRequiredMixin, TemplateView):
+    model=Blog
     template_name = 'blog/my_blogs.html'
 
-
-
+    
 
 class CreateBlog(LoginRequiredMixin,CreateView):
     model = Blog
@@ -41,21 +42,28 @@ class BlogList(ListView):
 def blog_details(request,pk):
     blog = Blog.objects.get(pk=pk)
     comment_form=CommentForm()
-    already_liked = Like.objects.filter(blog=blog, user= request.user)
-    if already_liked:
-        liked = True
+    if request.user.is_authenticated:
+        already_liked = Like.objects.filter(blog=blog, user=request.user)
+        if already_liked:
+            liked = True
+        else:
+            liked = False
+        if request.method=="POST":
+            comment_form=CommentForm(request.POST)
+            if comment_form.is_valid():
+                comment=comment_form.save(commit=False)
+                comment.user = request.user
+                comment.blog=blog
+                comment.save()
+                return HttpResponseRedirect(reverse('blog:details', kwargs={'pk':pk}))
     else:
-        liked = False
-    if request.method=="POST":
-        comment_form=CommentForm(request.POST)
-        if comment_form.is_valid():
-            comment=comment_form.save(commit=False)
-            comment.user = request.user
-            comment.blog=blog
-            comment.save()
-            return HttpResponseRedirect(reverse('blog:details', kwargs={'pk':pk}))
+        return render(request,'blog/blog_details.html',
+        context={'blog':blog})
 
-    return render(request,'blog/blog_details.html',context={'blog':blog,'comment_form':comment_form,'liked':liked})
+
+
+    return render(request,'blog/blog_details.html',
+    context={'blog':blog,'comment_form':comment_form,'liked':liked})
 
 
 @login_required
